@@ -40,7 +40,28 @@ def cubic_permute(dgts):
             cubic_permute(dgts[:i]+dgts[i+1:])
             permute_num /= 10
 
-num = 300
+num = 1141
+while True:
+    results = [num]
+    digits = sorted(get_digits(num**3), reverse=True)
+    maxpermute = get_number(digits)
+    num2 = num + 1
+    while True:
+        digits2 = get_digits(num2**3)
+        if get_number(digits2)>maxpermute:
+            break
+        if sorted(digits2, reverse=True) == digits:
+            results.append(num2)
+            if len(results)>=5:
+                print results
+                quit()
+        num2 += 1
+    print num
+    num += 1
+
+quit()
+
+##############################################################################
 #results = []
 while True:
     results = set([num**3])
