@@ -25,50 +25,54 @@ def cat(n1, n2):
 #print cat(123, 4567)
 #quit()
 
-def check_pair(pairs):
-    global primes
-    n = len(pairs)
-
-    for i in range(n-1,n-2,-1):
-        for j in range(n-1):
-            if not isprime(cat(pairs[i], pairs[j])):
-                return False
-            if not isprime(cat(pairs[j], pairs[i])):
-                return False
+def check_pair(num1, num2):
+    if not isprime(cat(num1, num2)):
+        return False
+    if not isprime(cat(num2, num1)):
+        return False
     return True
-#pairs = [3,7,109, 673]
-#print check_pair(pairs)
-#quit()
 
-primes = []
-for i in range(3,1000000,2):
+
+primes = [3]
+for i in range(7,10000,2):
     if isprime(i):
         primes.append(i)
 print len(primes)
 #print primes.index(3), primes.index(7), primes.index(109), primes.index(673)
 #quit()
 
-indx = [0,2,27,120,121]
-while True:
-    #raw_input(indx)
-    temp = [primes[indx[0]], primes[indx[1]], primes[indx[2]],
-            primes[indx[3]], primes[indx[4]]]
+primeDict = dict.fromkeys(primes)
+primeDict[3] = []
 
-    if check_pair(temp):
-        print sum(temp), temp
-        quit()
+for i in range(1,len(primes)):
+    primeDict[primes[i]] = []
+    for j in range(i):
+        if check_pair(primes[i], primes[j]):
+            primeDict[primes[j]].append(primes[i])
+            primeDict[primes[i]].append(primes[j])
 
-    indx[-1] += 1
+#for i,j in primeDict.items():
+#    print i, j
 
-
-
-#    indxmin = min(indx)
-#    temp2 = indx.index(indxmin)
-#    while True:
-#        indxmin += 1
-#        if indxmin >= len(primes):
-#            print "Not such pairs found in this primes list!"
-#            quit()
-#        if indxmin not in indx :
-#            indx[temp2] = indxmin
-#            break
+testcount = 0
+for i in primeDict.keys():
+    for j in primeDict[i]:
+        if i > j: continue
+        temp = set(primeDict[i]).intersection(set(primeDict[j]))
+        temp = sorted(list(temp))
+        if len(temp) >= 3 :
+            #print i, j, temp
+            for k in range(len(temp)-2):
+                for m in range(k+1,len(temp)-1):
+                    for n in range(m+1, len(temp)):
+                        #if testcount> 4: quit()
+                        #testcount += 1
+                        list1 = primeDict[temp[k]] + [temp[k]]
+                        list2 = primeDict[temp[m]] + [temp[m]]
+                        list3 = primeDict[temp[n]] + [temp[n]]
+                        temp2 = set(list1).intersection(set(list2))
+                        temp2 = temp2.intersection(set(list3))
+                        temp2 = temp2.intersection(set(temp))
+                        temp2 = list(temp2)
+                        if len(temp2)>=3:
+                            print i, j, temp[k], temp[m], temp[n], temp2
